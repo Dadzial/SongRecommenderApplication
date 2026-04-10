@@ -1,0 +1,44 @@
+# Node modules
+
+/frontend/node_modules/
+/node_modules/
+/frontend/.vscode
+
+# Build output
+dist/
+build/
+
+
+.DS_Store
+Thumbs.db
+
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE/Editor
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Test coverage
+coverage/
+
+# Env files
+.env
+.env.*.local
+
+# Cache
+.cache/
+*.log
+
+# Vite
+*.local
+
+# Mac OS
+*.DS_Store
