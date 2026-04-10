@@ -3,6 +3,7 @@
 :root {
   /* Colors */
   --background-color: #000;
+  --font-color: #fff;
   --font-regular: 'Poppins', sans-serif;
   --font-bold: 'Poppins', sans-serif;
 
