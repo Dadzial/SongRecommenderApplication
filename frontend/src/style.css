@@ -1,9 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
 :root {
-  /*Here will be colors and fonts*/
+  /* Colors */
+  --background-color: #000;
+  --font-regular: 'Poppins', sans-serif;
+  --font-bold: 'Poppins', sans-serif;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
+html, body {
+  background: radial-gradient(circle, #262626 0%, #212121 100%);
+  color: #fff;
+  font-family: var(--font-regular), serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.bold {
+  font-family: var(--font-bold), serif;
+  font-weight: 700;
 }
