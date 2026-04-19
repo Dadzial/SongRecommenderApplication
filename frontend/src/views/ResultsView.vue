@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div class="app-icon">
+      <img src="/sound.png" width="512" height="512" alt="SongRecommender" />
+    </div>
     <button class="back-btn" @click="router.push('/')">← Back</button>
     <h1 class="title">Song Recommender</h1>
 
@@ -53,14 +56,30 @@ const handleSearch = (songs) => {
 .container {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(180deg, #3a3a3a, #1f1f1f);
+  background: radial-gradient(circle, #3a3a3a, #1f1f1f);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 100px;
-  gap: 40px;
+  gap: 30px;
   color: white;
   text-align: center;
+  box-sizing: border-box;
+}
+
+.app-icon {
+  margin-bottom: 10px;
+  height: 120px;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-icon img {
+  width: 200%;
+  height: 200%;
+  object-fit: contain;
 }
 
 .back-btn {
@@ -98,7 +117,6 @@ const handleSearch = (songs) => {
 }
 
 .footer {
-  margin-top: 40px;
   display: flex;
   align-items: center;
   gap: 12px;
