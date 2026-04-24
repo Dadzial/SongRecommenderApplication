@@ -28,3 +28,6 @@ class SongResponse(SongBase):
 
     class Config:
         from_attributes = True
+
+class RecommendationRequest(BaseModel):
+    track_ids: list[str]
