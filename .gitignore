@@ -42,3 +42,6 @@ coverage/
 
 # Mac OS
 *.DS_Store
+
+#Database
+backend/database/song_recommender.db
