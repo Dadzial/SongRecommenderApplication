@@ -12,15 +12,17 @@ defineProps({
 
 <style scoped>
 .card {
-  width: 180px;
+  width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
+  border-radius: 8px;
   transition: transform 0.2s;
   background: #333;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .card:hover {
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 
 img {

@@ -1,44 +1,95 @@
 <template>
-  <div class="search">
-    <input
-        v-model="query"
-        placeholder="e.g Bracia Figo Fagot – Bożenko"
-    />
-    <button @click="handleSearch">
-      <span class="separator" aria-hidden="true">|</span>
-      <img src="/src/assets/search_icon.png" alt="search" />
-    </button>
+  <div class="search-container">
+    <div class="search-bar">
+      <input
+          v-model="query"
+          @input="onInput"
+          @keydown.enter="handleEnter"
+          placeholder="Search for a song (e.g. Bohemian Rhapsody)"
+      />
+      <div class="button-group">
+        <span class="separator">|</span>
+        <button @click="handleSearch">
+          <img src="/src/assets/search_icon.png" alt="search" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Dropdown z wynikami -->
+    <ul v-if="results.length > 0 && showDropdown" class="results-list">
+      <li 
+        v-for="song in results" 
+        :key="song.track_id" 
+        @click="selectSong(song)"
+        class="result-item"
+      >
+        <span class="song-name">{{ song.track_name }}</span>
+        <span class="artist-name">{{ song.artists }}</span>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, onMounted, onUnmounted } from "vue"
+import searchSongs from "../services/SongsQuery.ts"
 
-const emit = defineEmits(["search"])
+const emit = defineEmits(["select"])
 const query = ref("")
+const results = ref([])
+const showDropdown = ref(false)
+let debounceTimer = null
 
-const handleSearch = () => {
-  const songs = query.value
-      .split(",")
-      .map(s => s.trim())
-      .filter(s => s)
-
-  if (songs.length > 5) {
-    alert("Max 5 songs!")
+const onInput = () => {
+  clearTimeout(debounceTimer)
+  if (query.value.length < 2) {
+    results.value = []
     return
   }
 
-  emit("search", songs)
+  debounceTimer = setTimeout(async () => {
+    results.value = await searchSongs(query.value)
+    showDropdown.value = true
+  }, 300)
 }
+
+const selectSong = (song) => {
+  emit("select", song)
+  query.value = ""
+  results.value = []
+  showDropdown.value = false
+}
+
+const handleEnter = () => {
+  if (results.value.length > 0) {
+    selectSong(results.value[0])
+  }
+}
+
+// Zamykanie dropdownu po kliknięciu poza nim
+const closeDropdown = (e) => {
+  if (!e.target.closest('.search-container')) {
+    showDropdown.value = false
+  }
+}
+
+onMounted(() => window.addEventListener('click', closeDropdown))
+onUnmounted(() => window.removeEventListener('click', closeDropdown))
 </script>
 
 <style scoped>
-.search {
-  display: flex;
-  background: #555;
-  border-radius: 25px;
-  padding: 10px 15px;
+.search-container {
+  position: relative;
   width: 600px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #333;
+  border-radius: 25px;
+  padding: 10px 20px;
+  border: 1px solid #444;
 }
 
 input {
@@ -50,41 +101,63 @@ input {
   font-size: 18px;
 }
 
-.search {
+.button-group {
   display: flex;
   align-items: center;
-  background: #555;
-  border-radius: 25px;
-  padding: 10px 15px;
-  width: 600px;
+}
+
+.separator {
+  color: #666;
+  margin: 0 10px;
 }
 
 button {
   background: none;
   border: none;
   cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-}
-
-.separator {
-  color: white;
-  font-size: 18px;
-  line-height: 1;
-  margin-right: 6px;
 }
 
 button img {
-  width: 18px !important;
-  height: 18px !important;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 20px;
+  height: 20px;
+}
+
+.results-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #222;
+  border-radius: 12px;
+  margin-top: 8px;
+  padding: 0;
+  list-style: none;
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #444;
+  text-align: left;
+}
+
+.result-item {
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #333;
+}
+
+.result-item:hover {
+  background: #333;
+}
+
+.song-name {
+  color: white;
+  font-weight: bold;
+}
+
+.artist-name {
+  color: #aaa;
+  font-size: 14px;
 }
 </style>
