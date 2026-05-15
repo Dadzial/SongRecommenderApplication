@@ -23,6 +23,11 @@ def get_recommendations(db: Session, track_ids: list[str], n_neighbors: int = 5)
     features_list = []
     for song in input_songs:
         song_features = [float(getattr(song, col)) for col in feature_cols]
+        
+
+        song_features[2] = (song_features[2] + 50) / 55
+        song_features[8] = song_features[8] / 250
+        
         features_list.append(song_features)
 
     user_profile = np.mean(features_list, axis=0).reshape(1, -1)
@@ -36,7 +41,10 @@ def get_recommendations(db: Session, track_ids: list[str], n_neighbors: int = 5)
     
     recommended_songs = db.query(Song).filter(Song.id.in_(final_db_ids)).all()
 
-    result = [s for s in recommended_songs if s.track_id not in track_ids][:n_neighbors]
+    songs_dict = {s.id: s for s in recommended_songs}
+    ordered_songs = [songs_dict[sid] for sid in final_db_ids if sid in songs_dict]
+
+    result = [s for s in ordered_songs if s.track_id not in track_ids][:n_neighbors]
     
     print(f"Sukcess: {len(result)}.")
     return result
