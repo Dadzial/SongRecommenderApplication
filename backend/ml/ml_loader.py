@@ -2,7 +2,7 @@ import pickle
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_PATH = os.path.join(BASE_DIR, "ml_models", "knn_model.pkl")
+MODEL_PATH = os.path.join(BASE_DIR, "ml_models", "gbr_model.pkl")
 
 class MLLoader:
     _instance = None
